@@ -78,6 +78,11 @@ void SurfaceInteropVAAPI::setSurface(const surface_ptr& surface,  int w, int h) 
     frame_height = (h ? h : surface->height());
 }
 
+surface_ptr SurfaceInteropVAAPI::getSurface()
+{
+    return m_surface;
+}
+
 void* SurfaceInteropVAAPI::map(SurfaceType type, const VideoFormat &fmt, void *handle, int plane)
 {
     if (!handle)

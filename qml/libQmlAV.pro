@@ -96,8 +96,10 @@ HEADERS *= \
     $$SDK_HEADERS
 
 greaterThan(QT_MINOR_VERSION, 1) {
-  HEADERS += QmlAV/QuickFBORenderer.h
-  SOURCES += QuickFBORenderer.cpp
+  HEADERS += QmlAV/QuickFBORenderer.h \
+             QmlAV/QuickFBOCapturer.h
+  SOURCES += QuickFBORenderer.cpp \
+             QuickFBOCapturer.cpp
 }
 
 unix:!android:!mac {
