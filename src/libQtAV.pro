@@ -497,7 +497,8 @@ SOURCES += \
     codec/video/VideoEncoder.cpp \
     codec/video/VideoEncoderFFmpeg.cpp \
     VideoThread.cpp \
-    VideoFrameExtractor.cpp
+    VideoFrameExtractor.cpp \
+    AVVideoCapturer.cpp
 
 SDK_HEADERS *= \
     QtAV/QtAV \
@@ -542,7 +543,8 @@ SDK_HEADERS *= \
     QtAV/Subtitle.h \
     QtAV/SubtitleFilter.h \
     QtAV/SurfaceInterop.h \
-    QtAV/version.h
+    QtAV/version.h \
+    QtAV/AVVideoCapturer.h
 
 SDK_PRIVATE_HEADERS *= \
     QtAV/private/factory.h \
