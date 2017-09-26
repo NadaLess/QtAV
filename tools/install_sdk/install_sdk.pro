@@ -351,6 +351,10 @@ message("creating script for module Qt$$module ...")
   }
   sdk_h_install.commands += $$quote($$MKDIR $$system_path($$[QT_INSTALL_HEADERS]/QtAV/$$VERSION/QtAV/))
   contains(QMAKE_HOST.os,Windows) {
+    # Copy directx folder
+    sdk_h_install.commands += $$quote($$MKDIR $$system_path($$[QT_INSTALL_HEADERS]/QtAV/directx))
+    sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/directx/*.h) $$system_path($$[QT_INSTALL_HEADERS]/QtAV/directx))
+    #
     sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/QtAV/private) $$system_path($$[QT_INSTALL_HEADERS]/QtAV/private))
     sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/QtAV/private) $$system_path($$[QT_INSTALL_HEADERS]/QtAV/$$VERSION/QtAV/private))
   } else {
