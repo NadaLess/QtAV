@@ -6,7 +6,7 @@
 
 namespace QtAV {
 
-class AVVideoCapturer: public QObject
+class Q_AV_EXPORT AVVideoCapturer: public QObject
 {
     Q_OBJECT
 public:
