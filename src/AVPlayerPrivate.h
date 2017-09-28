@@ -100,6 +100,9 @@ public:
         }
     }
 
+    AVVideoCapturer *getVideoCapturer() const;
+    void setVideoCapturer(AVVideoCapturer *capturer);
+
     bool auto_load;
     bool async_load;
     // can be QString, QIODevice*
@@ -155,6 +158,8 @@ public:
     AVPlayer::State state;
     MediaEndAction end_action;
     QMutex load_mutex;
+
+    AVVideoCapturer * m_videoCapturer;
 };
 
 } //namespace QtAV

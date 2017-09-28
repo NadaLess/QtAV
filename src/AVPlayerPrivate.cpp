@@ -591,6 +591,7 @@ bool AVPlayer::Private::setupVideoThread(AVPlayer *player)
     QObject::connect(vdec, SIGNAL(error(QtAV::AVError)), player, SIGNAL(error(QtAV::AVError)));
     if (!vthread) {
         vthread = new VideoThread(player);
+        vthread->setVideoCapturer(m_videoCapturer);
         vthread->setClock(clock);
         vthread->setStatistics(&statistics);
         vthread->setVideoCapture(vcapture);
@@ -646,6 +647,17 @@ void AVPlayer::Private::updateBufferValue()
         updateBufferValue(athread->packetQueue());
     if (vthread)
         updateBufferValue(vthread->packetQueue());
+}
+
+AVVideoCapturer *AVPlayer::Private::getVideoCapturer() const
+{
+    return m_videoCapturer;
+}
+
+void AVPlayer::Private::setVideoCapturer(AVVideoCapturer *capturer)
+{
+    m_videoCapturer = capturer;
+    if (vthread) vthread->setVideoCapturer(capturer);
 }
 
 } //namespace QtAV

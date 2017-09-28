@@ -29,6 +29,7 @@
 #include <QtAV/AVClock.h>
 #include <QtAV/Statistics.h>
 #include <QtAV/VideoDecoder.h>
+#include <QtAV/AVVideoCapturer.h>
 #include <QtAV/AVError.h>
 
 QT_BEGIN_NAMESPACE
@@ -270,6 +271,10 @@ public:
      * \sa VideoCapture
      */
     VideoCapture *videoCapture() const;
+
+    AVVideoCapturer* videoCapturer();
+    void setVideoCapturer(AVVideoCapturer * capturer);
+
     //TODO: no replay, replay without parsing the stream if it's already loaded. (not implemented). to force reload the stream, unload() then play()
     /*!
      * \brief play

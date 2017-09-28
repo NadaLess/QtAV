@@ -559,6 +559,16 @@ VideoCapture* AVPlayer::videoCapture() const
     return d->vcapture;
 }
 
+AVVideoCapturer *AVPlayer::videoCapturer()
+{
+    return d->getVideoCapturer();
+}
+
+void AVPlayer::setVideoCapturer(AVVideoCapturer *capturer)
+{
+    d->setVideoCapturer(capturer);
+}
+
 void AVPlayer::play(const QString& path)
 {
     setFile(path);
