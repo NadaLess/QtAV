@@ -68,6 +68,7 @@ public:
       , drop_frame_seek(true)
       , pts_history(30)
       , wait_err(0)
+      , capturer(nullptr)
     {
         tasks.blockFull(false);
 

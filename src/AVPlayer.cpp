@@ -561,12 +561,13 @@ VideoCapture* AVPlayer::videoCapture() const
 
 AVVideoCapturer *AVPlayer::videoCapturer()
 {
-    return d->getVideoCapturer();
+    return d->videoCapturer;
 }
 
 void AVPlayer::setVideoCapturer(AVVideoCapturer *capturer)
 {
-    d->setVideoCapturer(capturer);
+    d->videoCapturer = capturer;
+    if (d->vthread) d->vthread->setVideoCapturer(capturer);
 }
 
 void AVPlayer::play(const QString& path)
