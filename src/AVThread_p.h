@@ -37,6 +37,8 @@ typedef QTime QElapsedTimer;
 #include "PacketBuffer.h"
 #include "utils/ring.h"
 
+#include "AVVideoCapturer.h"
+
 QT_BEGIN_NAMESPACE
 class QRunnable;
 QT_END_NAMESPACE
@@ -83,6 +85,7 @@ public:
     PacketBuffer packets;
     AVDecoder *dec;
     OutputSet *outputSet;
+    AVVideoCapturer *capturer;
     QMutex mutex;
     QWaitCondition cond; //pause
     qreal delay;

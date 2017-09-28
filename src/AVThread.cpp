@@ -297,6 +297,17 @@ OutputSet* AVThread::outputSet() const
     return d_func().outputSet;
 }
 
+void AVThread::setVideoCapturer(AVVideoCapturer *capturer)
+{
+    d_func().capturer = capturer;
+}
+
+AVVideoCapturer *AVThread::videoCapturer() const
+{
+    return d_func().capturer;
+}
+
+
 void AVThread::onStarted()
 {
     d_func().sem.release();

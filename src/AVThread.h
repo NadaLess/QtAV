@@ -26,6 +26,7 @@
 #include <QtCore/QScopedPointer>
 #include <QtCore/QThread>
 #include "PacketBuffer.h"
+#include "AVVideoCapturer.h"
 //TODO: pause functions. AVOutput may be null, use AVThread's pause state
 
 namespace QtAV {
@@ -62,6 +63,9 @@ public:
 
     void setOutputSet(OutputSet *set);
     OutputSet* outputSet() const;
+
+    void setVideoCapturer(AVVideoCapturer *capturer);
+    AVVideoCapturer* videoCapturer() const;
 
     void setDemuxEnded(bool ended);
 

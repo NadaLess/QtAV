@@ -119,6 +119,11 @@ void VideoThread::addCaptureTask()
 
 void VideoThread::clearRenderers()
 {
+    // Set frame to capturer
+    if (d_func().capturer) {
+        d_func().capturer->setFrame(VideoFrame(), 0);
+    }
+
     d_func().outputSet->sendVideoFrame(VideoFrame());
 }
 
@@ -230,6 +235,12 @@ bool VideoThread::deliverVideoFrame(VideoFrame &frame)
         }
         frame = outFrame;
     }
+
+    // Set frame to capturer
+    if (d_func().capturer) {
+        d_func().capturer->setFrame(frame, 0);
+    }
+
     d.outputSet->sendVideoFrame(frame); //TODO: group by format, convert group by group
     d.outputSet->unlock();
 
