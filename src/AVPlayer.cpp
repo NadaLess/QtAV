@@ -559,7 +559,7 @@ VideoCapture* AVPlayer::videoCapture() const
     return d->vcapture;
 }
 
-AVVideoCapturer *AVPlayer::videoCapturer()
+AVVideoCapturer *AVPlayer::videoCapturer() const
 {
     return d->videoCapturer;
 }

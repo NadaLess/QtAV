@@ -272,7 +272,7 @@ public:
      */
     VideoCapture *videoCapture() const;
 
-    AVVideoCapturer* videoCapturer();
+    AVVideoCapturer* videoCapturer() const;
     void setVideoCapturer(AVVideoCapturer * capturer);
 
     //TODO: no replay, replay without parsing the stream if it's already loaded. (not implemented). to force reload the stream, unload() then play()
