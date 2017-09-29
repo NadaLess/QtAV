@@ -664,6 +664,10 @@ void VideoMaterialPrivate::uploadPlane(int p, bool updateTexture)
     // This is necessary for non-power-of-two textures
     //glPixelStorei(GL_UNPACK_ALIGNMENT, get_alignment(stride)); 8, 4, 2, 1
     // glPixelStorei(GL_UNPACK_ROW_LENGTH, stride/glbpp); // for stride%glbpp > 0?
+    // DN: For align the surfaces when we are streaming a window with ugly resolutions
+    DYGL(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
+    DYGL(glPixelStorei(GL_PACK_ALIGNMENT, 1));
+    //
     DYGL(glTexSubImage2D(target, 0, 0, 0, texture_size[p].width(), texture_size[p].height(), data_format[p], data_type[p], try_pbo ? 0 : frame.constBits(p)));
     if (false) { //texture_size[].width()*gl_bpp != bytesPerLine[]
         for (int y = 0; y < plane0Size.height(); ++y)
