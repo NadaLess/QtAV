@@ -67,6 +67,8 @@ void OutputSet::sendVideoFrame(const VideoFrame &frame)
         // TODO: sort vo by supported formats when a new vo is added to reduce convertion
         if (!vo->isSupported(frame.pixelFormat()))
             f = frame.to(vo->preferredPixelFormat());
+
+        vo->setOrientation(0);
         vo->receive(f);
     }
 }
