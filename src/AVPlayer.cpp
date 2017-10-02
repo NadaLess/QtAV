@@ -1111,6 +1111,8 @@ AVPlayer::State AVPlayer::state() const
 
 void AVPlayer::setState(State value)
 {
+    if (mediaStatus() == QtAV::LoadingMedia) return;
+
     if (d->state == value)
         return;
     if (value == StoppedState) {
