@@ -426,6 +426,7 @@ public Q_SLOTS:
      * \return true if success or already loaded.
      */
     bool load();
+    void unload();
 
     void togglePause();
     void pause(bool p = true);
@@ -625,12 +626,12 @@ private Q_SLOTS:
 protected:
     // TODO: set position check timer interval
     virtual void timerEvent(QTimerEvent *);
+
 private:
     /*!
      * \brief unload
      * If the media is loading or loaded but not playing, unload it. Internall use only.
      */
-    void unload(); //TODO: private. call in stop() if not load() by user? or always unload() in stop()?
     qint64 normalizedPosition(qint64 pos);
     class Private;
     QScopedPointer<Private> d;
