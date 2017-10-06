@@ -850,6 +850,11 @@ bool AVPlayer::isSeekable() const
     return d->demuxer.isSeekable();
 }
 
+bool AVPlayer::isSeeking() const
+{
+    return d->seeking;
+}
+
 qint64 AVPlayer::position() const
 {
     // TODO: videoTime()?
