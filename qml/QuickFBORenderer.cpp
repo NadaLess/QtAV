@@ -79,11 +79,8 @@ public:
         matrix.scale((GLfloat)out_rect.width()/(GLfloat)renderer_width, (GLfloat)out_rect.height()/(GLfloat)renderer_height, 1);
         if (rotation())
             matrix.rotate(rotation(), 0, 0, 1); // Z axis
-        // FIXME: why x/y is mirrored?
-        if (rotation()%180)
-            matrix.scale(-1, 1);
-        else
-            matrix.scale(1, -1);
+        // FIXME: why y is mirrored?
+        matrix.scale(1, -1);
     }
     bool frame_changed;
     bool opengl;
