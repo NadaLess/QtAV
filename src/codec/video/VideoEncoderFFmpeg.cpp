@@ -288,6 +288,13 @@ struct ScopedAVFrameDeleter
     }
 };
 
+struct ScopedAVPacketDeleter
+{
+    static inline void cleanup(void *pointer) {
+        av_packet_free((AVPacket**)&pointer);
+    }
+};
+
 bool VideoEncoderFFmpeg::encode(const VideoFrame &frame)
 {
     DPTR_D(VideoEncoderFFmpeg);
@@ -366,16 +373,19 @@ bool VideoEncoderFFmpeg::encode(const VideoFrame &frame)
         }
 #endif //HAVE_AVHWCTX
     }
-    AVPacket pkt;
-    av_init_packet(&pkt);
-    pkt.data = (uint8_t*)d.buffer.constData();
-    pkt.size = d.buffer.size();
+
+    QScopedPointer<AVPacket, ScopedAVPacketDeleter> pkt(av_packet_alloc());
+    av_init_packet(pkt.data());
+    pkt->data = (uint8_t*)d.buffer.constData();
+    pkt->size = d.buffer.size();
     int got_packet = 0;
-    int ret = avcodec_encode_video2(d.avctx, &pkt, f.data(), &got_packet);
+    int ret = avcodec_encode_video2(d.avctx, pkt.data(), f.data(), &got_packet);
+
     if (ret < 0) {
         qWarning("error avcodec_encode_video2: %s" ,av_err2str(ret));
         return false; //false
     }
+
     d.nb_encoded++;
     if (!got_packet) {
         qWarning("no packet got");
@@ -383,9 +393,9 @@ bool VideoEncoderFFmpeg::encode(const VideoFrame &frame)
         // invalid frame means eof
         return frame.isValid();
     }
-   // qDebug("enc avpkt.pts: %lld, dts: %lld.", pkt.pts, pkt.dts);
-    d.packet = Packet::fromAVPacket(&pkt, av_q2d(d.avctx->time_base));
-   // qDebug("enc packet.pts: %.3f, dts: %.3f.", d.packet.pts, d.packet.dts);
+
+    d.packet = Packet::fromAVPacket(pkt.data(), av_q2d(d.avctx->time_base));
+
     return true;
 }
 
