@@ -231,8 +231,21 @@ bool VideoEncoderFFmpegPrivate::open()
     if(avctx->codec_id == QTAV_CODEC_ID(H264)) {
         avctx->gop_size = 10;
         //avctx->max_b_frames = 3;//h264
-        av_dict_set(&dict, "preset", "fast", 0); //x264
-        av_dict_set(&dict, "tune", "zerolatency", 0);  //x264
+
+        // fmoya: X264 options
+        if (codec_name == "libx264") {
+            // -preset veryfast
+            av_dict_set(&dict, "preset", "veryfast", 0);
+            // -tune zerolatency
+            av_dict_set(&dict, "tune", "zerolatency", 0);
+            // crf=10
+            av_opt_set_double(avctx->priv_data, "crf", 10, 0);
+            // intra-refresh=1
+            av_opt_set_int(avctx->priv_data, "intra-refresh", 1, 0);
+            // slice-max-size=1500
+            av_opt_set_int(avctx->priv_data, "slice-max-size", 1500 * 1000, 0);
+        }
+
         //av_dict_set(&dict, "profile", "main", 0); // conflict with vaapi (int values)
     }
     if(avctx->codec_id == AV_CODEC_ID_HEVC){
