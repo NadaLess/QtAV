@@ -238,7 +238,7 @@ bool VideoThread::deliverVideoFrame(VideoFrame &frame)
 
     // Set frame to capturer
     if (d_func().capturer) {
-        d_func().capturer->setFrame(frame.to(QtAV::VideoFormat(QtAV::VideoFormat::Format_YUV420P)), 0);
+        d_func().capturer->setFrame(frame, 0);
     }
 
     d.outputSet->sendVideoFrame(frame); //TODO: group by format, convert group by group
