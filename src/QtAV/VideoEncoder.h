@@ -56,7 +56,7 @@ public:
      * \param frame pass an invalid frame to get delayed frames
      * \return
      */
-    virtual bool encode(const VideoFrame& frame = VideoFrame()) = 0;
+    virtual bool encode(const VideoFrame& frame = VideoFrame(), const int& keyFrame = 0) = 0;
     /// output parameters
     /*!
      * \brief setWidth

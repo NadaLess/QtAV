@@ -72,7 +72,7 @@ class VideoEncoderFFmpeg : public VideoEncoder
 public:
     VideoEncoderFFmpeg();
     VideoEncoderId id() const Q_DECL_OVERRIDE;
-    bool encode(const VideoFrame &frame = VideoFrame()) Q_DECL_OVERRIDE;
+    bool encode(const VideoFrame &frame = VideoFrame(), const int &keyFrame = 0) Q_DECL_OVERRIDE;
 
     void setHWDevice(const QString& name);
     QString hwDevice() const;
@@ -308,7 +308,7 @@ struct ScopedAVPacketDeleter
     }
 };
 
-bool VideoEncoderFFmpeg::encode(const VideoFrame &frame)
+bool VideoEncoderFFmpeg::encode(const VideoFrame &frame, const int &keyFrame)
 {
     DPTR_D(VideoEncoderFFmpeg);
     QScopedPointer<AVFrame, ScopedAVFrameDeleter> f;
@@ -392,6 +392,7 @@ bool VideoEncoderFFmpeg::encode(const VideoFrame &frame)
     pkt->data = (uint8_t*)d.buffer.constData();
     pkt->size = d.buffer.size();
     int got_packet = 0;
+    f->key_frame = keyFrame;
     int ret = avcodec_encode_video2(d.avctx, pkt.data(), f.data(), &got_packet);
 
     if (ret < 0) {
