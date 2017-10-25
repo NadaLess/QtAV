@@ -163,6 +163,7 @@ void AVDecoder::setCodecContext(void *codecCtx)
         return;
     if (isOpen()) {
         qWarning("Can not copy codec properties when it's open");
+        flush();
         close(); //
     }
     d.is_open = false;
