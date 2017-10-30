@@ -221,38 +221,7 @@ public:
         nb_surfaces = 0;
         disable_derive = true;
         image_fmt = VideoFormat::Format_Invalid;
-
-        NativeDisplay nd;
-        if (display_type == VideoDecoderVAAPI::DRM) {
-            nd.type = NativeDisplay::DRM;
-        } else if (display_type == VideoDecoderVAAPI::X11) {
-            nd.type = NativeDisplay::X11;
-        } else if (display_type == VideoDecoderVAAPI::GLX) {
-            nd.type = NativeDisplay::GLX;
-        }
-        display = display_t::create(nd);
-
-#ifndef QT_NO_OPENGL
-    if (display_type == VideoDecoderVAAPI::GLX)
-        interop_res = InteropResourcePtr(new GLXInteropResource());
-#if VA_X11_INTEROP
-    if (display_type == VideoDecoderVAAPI::X11) //if egl and !tfp(va>=0.38), use EGLInteropResource
-        interop_res = InteropResourcePtr(new X11InteropResource());
-#endif //VA_X11_INTEROP
-#if QTAV_HAVE(EGL_CAPI)
-    if (OpenGLHelper::isEGL()) {
-        if (va_0_38::isValid() && vaapi::checkEGL_DMA())
-            interop_res = InteropResourcePtr(new EGLInteropResource());
     }
-#endif //QTAV_HAVE(EGL_CAPI)
-#endif //QT_NO_OPENGL
-    }
-
-    ~VideoDecoderVAAPIPrivate() {
-        display.clear();
-        interop_res.clear();
-    }
-
     bool open() Q_DECL_OVERRIDE;
     void close() Q_DECL_OVERRIDE;
     bool ensureSurfaces(int count, int w, int h, bool discard_old = false);
@@ -501,7 +470,22 @@ bool VideoDecoderVAAPIPrivate::open()
         qWarning("codec(%s) or profile(%s) is not supported", avcodec_get_name(codec_ctx->codec_id), getProfileName(codec_ctx->codec_id, codec_ctx->profile));
         return false;
     }
-
+    /* Create a VA display */
+    foreach (VideoDecoderVAAPI::DisplayType dt, display_priority) {
+        NativeDisplay nd;
+        if (dt == VideoDecoderVAAPI::DRM) {
+            nd.type = NativeDisplay::DRM;
+        } else if (dt == VideoDecoderVAAPI::X11) {
+            nd.type = NativeDisplay::X11;
+        } else if (dt == VideoDecoderVAAPI::GLX) {
+            nd.type = NativeDisplay::GLX;
+        }
+        display = display_t::create(nd);
+        if (display) {
+            display_type = dt;
+            break;
+        }
+    }
     if (!display/* || vaDisplayIsValid(display->get()) != 0*/) {
         qWarning("Could not get a VAAPI device");
         return false;
@@ -579,6 +563,20 @@ bool VideoDecoderVAAPIPrivate::open()
     VAWARN(vaDestroyContext(display->get(), context_id));
     context_id = VA_INVALID_ID;
 
+#ifndef QT_NO_OPENGL
+    if (display_type == VideoDecoderVAAPI::GLX)
+        interop_res = InteropResourcePtr(new GLXInteropResource());
+#if VA_X11_INTEROP
+    if (display_type == VideoDecoderVAAPI::X11) //if egl and !tfp(va>=0.38), use EGLInteropResource
+        interop_res = InteropResourcePtr(new X11InteropResource());
+#endif //VA_X11_INTEROP
+#if QTAV_HAVE(EGL_CAPI)
+    if (OpenGLHelper::isEGL()) {
+        if (va_0_38::isValid() && vaapi::checkEGL_DMA())
+            interop_res = InteropResourcePtr(new EGLInteropResource());
+    }
+#endif //QTAV_HAVE(EGL_CAPI)
+#endif //QT_NO_OPENGL
     return true;
 }
 
@@ -696,6 +694,7 @@ void VideoDecoderVAAPIPrivate::close()
         VAWARN(vaDestroyConfig(display->get(), config_id));
         config_id = VA_INVALID_ID;
     }
+    display.clear();
     releaseUSWC();
     nb_surfaces = 0;
     surfaces.clear();

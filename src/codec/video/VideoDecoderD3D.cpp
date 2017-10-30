@@ -352,6 +352,8 @@ bool VideoDecoderD3DPrivate::open()
             return false;
         }
     }
+    if (!createDevice())
+        return false;
     format_fcc = 0;
     QVector<GUID> codecs = getSupportedCodecs();
     const d3d_format_t *fmt = getFormat(codec_ctx, codecs, &codec_guid);
@@ -370,6 +372,7 @@ void VideoDecoderD3DPrivate::close()
     restore();
     releaseUSWC();
     destroyDecoder();
+    destroyDevice();
 }
 
 void* VideoDecoderD3DPrivate::setup(AVCodecContext *avctx)

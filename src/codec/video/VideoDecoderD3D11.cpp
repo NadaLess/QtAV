@@ -121,10 +121,8 @@ public:
 #endif
         if (d3d11::InteropResource::isSupported(d3d11::InteropEGL))
             copy_mode = VideoDecoderFFmpegHW::ZeroCopy;
-        createDevice();
     }
     ~VideoDecoderD3D11Private() {
-        destroyDevice();
 #ifndef Q_OS_WINRT
         if (dll) {
             FreeLibrary(dll);

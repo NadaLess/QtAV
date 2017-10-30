@@ -111,11 +111,9 @@ public:
         vs = 0;
         decoder = 0;
         available = loadDll();
-        createDevice();
     }
     virtual ~VideoDecoderDXVAPrivate() // can not unload dlls because dx resource will be released in VideoDecoderD3DPrivate::close
     {
-        destroyDevice();
         unloadDll();
     }
     AVPixelFormat vaPixelFormat() const Q_DECL_OVERRIDE { return QTAV_PIX_FMT_C(DXVA2_VLD);}
