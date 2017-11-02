@@ -358,6 +358,12 @@ message("creating script for module Qt$$module ...")
     sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/QtAV/private) $$system_path($$[QT_INSTALL_HEADERS]/QtAV/private))
     sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/QtAV/private) $$system_path($$[QT_INSTALL_HEADERS]/QtAV/$$VERSION/QtAV/private))
   } else {
+    config_vaapi* {
+      sdk_h_install.commands += $$quote($$MKDIR $$system_path($$[QT_INSTALL_HEADERS]/QtAV/vaapi))
+      sdk_h_install.commands += $$quote($$MKDIR $$system_path($$[QT_INSTALL_HEADERS]/QtAV/utils))
+      sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/vaapi/*.h) $$system_path($$[QT_INSTALL_HEADERS]/QtAV/vaapi))
+      sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/utils/*.h) $$system_path($$[QT_INSTALL_HEADERS]/QtAV/utils))
+    }
     sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/QtAV/private) $$system_path($$[QT_INSTALL_HEADERS]/QtAV))
     sdk_h_install.commands += $$quote($$COPY_DIR $$system_path($$PROJECTROOT/src/QtAV/private) $$system_path($$[QT_INSTALL_HEADERS]/QtAV/$$VERSION/QtAV))
   }
