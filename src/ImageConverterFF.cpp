@@ -80,11 +80,8 @@ bool ImageConverterFF::convert(const quint8 *const src[], const int srcStride[],
         setOutSize(d.w_in, d.h_in);
     }
 //TODO: move those code to prepare()
-    if (d.sws_ctx) {
-        sws_freeContext(d.sws_ctx);
-        d.sws_ctx = 0;
-    }
-    d.sws_ctx = sws_getContext(d.w_in, d.h_in, (AVPixelFormat)d.fmt_in
+    d.sws_ctx = sws_getCachedContext(d.sws_ctx
+            , d.w_in, d.h_in, (AVPixelFormat)d.fmt_in
             , d.w_out, d.h_out, (AVPixelFormat)d.fmt_out
             , (d.w_in == d.w_out && d.h_in == d.h_out) ? SWS_POINT : SWS_FAST_BILINEAR //SWS_BICUBIC
             , NULL, NULL, NULL
