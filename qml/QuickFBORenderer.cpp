@@ -47,14 +47,14 @@ class FBORenderer : public QQuickFramebufferObject::Renderer
 {
 public:
     FBORenderer(QuickFBORenderer* item) : m_item(item) {
-        QObject::connect(m_item, &QuickFBORenderer::destroyed, [this](QObject *) {
+        m_destroyedConnection = QObject::connect(m_item,
+                                                 &QuickFBORenderer::destroyed,
+                                                 [this](QObject *) {
             m_item = nullptr;
         });
     }
     ~FBORenderer() {
-        if (m_item != nullptr) {
-            m_item->disconnect();
-        }
+        QObject::disconnect(m_destroyedConnection);
         m_item = nullptr;
     }
     QOpenGLFramebufferObject* createFramebufferObject(const QSize &size) Q_DECL_OVERRIDE {
@@ -70,6 +70,7 @@ public:
     }
 private:
     QuickFBORenderer *m_item;
+    QMetaObject::Connection m_destroyedConnection;
 };
 
 class QuickFBORendererPrivate : public VideoRendererPrivate
