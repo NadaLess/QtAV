@@ -46,17 +46,20 @@ FACTORY_REGISTER(VideoRenderer, QuickFBO, "QuickFBO")
 class FBORenderer : public QQuickFramebufferObject::Renderer
 {
 public:
-    FBORenderer(QuickFBORenderer* item) : m_item(item) {}
+    FBORenderer(QuickFBORenderer* item) : m_item(item) {
+        QObject::connect(m_item, &QuickFBORenderer::destroyed, [this](QObject *) {
+            m_item = nullptr;
+        });
+    }
     QOpenGLFramebufferObject* createFramebufferObject(const QSize &size) Q_DECL_OVERRIDE {
+        if (m_item == nullptr) return nullptr;
+
         m_item->fboSizeChanged(size);
         return QQuickFramebufferObject::Renderer::createFramebufferObject(size);
     }
     void render() Q_DECL_OVERRIDE {
-        Q_ASSERT(m_item);
+        if (m_item == nullptr) return;
         m_item->renderToFbo(framebufferObject());
-    }
-    void synchronize(QQuickFramebufferObject *item) Q_DECL_OVERRIDE {
-        m_item = static_cast<QuickFBORenderer*>(item);
     }
 private:
     QuickFBORenderer *m_item;
