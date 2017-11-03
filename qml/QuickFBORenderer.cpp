@@ -51,6 +51,12 @@ public:
             m_item = nullptr;
         });
     }
+    ~FBORenderer() {
+        if (m_item != nullptr) {
+            m_item->disconnect();
+        }
+        m_item = nullptr;
+    }
     QOpenGLFramebufferObject* createFramebufferObject(const QSize &size) Q_DECL_OVERRIDE {
         if (m_item == nullptr) return nullptr;
 
@@ -59,6 +65,7 @@ public:
     }
     void render() Q_DECL_OVERRIDE {
         if (m_item == nullptr) return;
+
         m_item->renderToFbo(framebufferObject());
     }
 private:
