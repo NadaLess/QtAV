@@ -384,6 +384,7 @@ void QuickFBORenderer::drawFrame()
     }
     if (d.frame_changed) {
         d.glv.setCurrentFrame(d.video_frame);
+        d.video_frame = VideoFrame();
         d.frame_changed = false;
     }
     d.glv.render(QRectF(), realROI(), d.matrix);

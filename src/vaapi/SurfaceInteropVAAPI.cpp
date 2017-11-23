@@ -170,6 +170,12 @@ bool GLXInteropResource::map(const surface_ptr& surface, GLuint tex, int w, int 
     VAWARN(vaSyncSurface(surface->vadisplay(), surface->get()));
     return true;
 }
+
+bool GLXInteropResource::unmap(const surface_ptr &surface, GLuint tex)
+{
+    glx_surfaces.remove(tex);
+    return true;
+}
 #endif //QT_NO_OPENGL
 #if VA_X11_INTEROP
 class X11 {

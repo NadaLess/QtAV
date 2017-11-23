@@ -628,15 +628,9 @@ void VideoThread::run()
             //qDebug("v_a:%.4f, v_a_: %.4f", v_a, v_a_);
         }
     }
-#if 0
-    if (d.stop) {// user stop
-        // decode eof?
-        qDebug("decoding eof...");
 
-        while (d.dec && d.dec->decode(Packet::createEOF())) {d.dec->flush();}
-    }
-#endif
     d.packets.clear();
+    d.displayed_frame = VideoFrame();
     qDebug("Video thread stops running...");
 }
 

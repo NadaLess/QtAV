@@ -82,7 +82,13 @@ private:
 class GLXInteropResource Q_DECL_FINAL: public InteropResource, protected VAAPI_GLX
 {
 public:
+    ~GLXInteropResource() {
+        glx_surfaces.clear();
+    }
+
     bool map(const surface_ptr &surface, GLuint tex, int w, int h, int) Q_DECL_OVERRIDE;
+    bool unmap(const surface_ptr &surface, GLuint tex) Q_DECL_OVERRIDE;
+
 private:
     surface_glx_ptr surfaceGLX(const display_ptr& dpy, GLuint tex);
     QMap<GLuint,surface_glx_ptr> glx_surfaces; // render to different texture. surface_glx_ptr is created with texture

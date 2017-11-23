@@ -613,12 +613,12 @@ bool VideoDecoderVAAPIPrivate::prepareVAImage(int w, int h)
     if (!disable_derive || copy_mode == VideoDecoderVAAPI::ZeroCopy) {
         if (vaDeriveImage(display->get(), surfaces[0], &test_image) == VA_STATUS_SUCCESS) {
             qDebug("vaDeriveImage supported");
-            supports_derive = true;
             image_fmt = pixelFormatFromVA(image.format.fourcc);
-            /* from vlc: Use vaDerive() iif it supports the best selected format */
+
+            /* from vlc: Use vaDerive() if it supports the best selected format */
             if (image.format.fourcc == test_image.format.fourcc) {
                 qDebug("vaDerive is ok");
-//                supports_derive = true;
+                supports_derive = true;
             }
             VAWARN(vaDestroyImage(display->get(), test_image.image_id));
         }
