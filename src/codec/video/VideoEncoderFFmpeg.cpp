@@ -265,6 +265,17 @@ bool VideoEncoderFFmpegPrivate::open()
 
 bool VideoEncoderFFmpegPrivate::close()
 {
+#ifdef HAVE_AVHWCTX
+    if (hw_device_ctx != nullptr) {
+        av_buffer_unref(&hw_device_ctx);
+    }
+
+    if (hwframes_ref != nullptr) {
+        av_buffer_unref(&hwframes_ref);
+    }
+    sw_fmts.clear();
+#endif
+
     AV_ENSURE_OK(avcodec_close(avctx), false);
     return true;
 }
