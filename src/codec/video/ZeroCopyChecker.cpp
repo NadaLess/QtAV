@@ -1,4 +1,5 @@
 #include "QtAV/ZeroCopyChecker.h"
+#include <QDebug>
 
 using namespace QtAV;
 
@@ -33,6 +34,8 @@ ZeroCopyChecker::ZeroCopyChecker():
     bool hasInterop = ctx->hasExtension("WGL_NV_DX_interop");
     bool hasInterop2 = ctx->hasExtension("WGL_NV_DX_interop2");
     setEnabled(hasInterop || hasInterop2);
+
+    qWarning() << Q_FUNC_INFO << "ZeroCopyEnabled:" << enabled();
 
     delete m_surface;
     delete ctx;
