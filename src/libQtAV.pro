@@ -496,9 +496,10 @@ SOURCES += \
     codec/video/VideoDecoderFFmpegHW.cpp \
     codec/video/VideoEncoder.cpp \
     codec/video/VideoEncoderFFmpeg.cpp \
+    codec/video/ZeroCopyChecker.cpp \
     VideoThread.cpp \
     VideoFrameExtractor.cpp \
-    AVVideoCapturer.cpp
+    AVVideoCapturer.cpp \
 
 SDK_HEADERS *= \
     QtAV/QtAV \
@@ -544,6 +545,7 @@ SDK_HEADERS *= \
     QtAV/SubtitleFilter.h \
     QtAV/SurfaceInterop.h \
     QtAV/version.h \
+    QtAV/ZeroCopyChecker.h \
     QtAV/AVVideoCapturer.h
 
 SDK_PRIVATE_HEADERS *= \
@@ -594,6 +596,7 @@ HEADERS *= \
     utils/internal.h \
     output/OutputSet.h \
     ColorTransform.h
+
 # from mkspecs/features/qt_module.prf
 # OS X and iOS frameworks
 mac_framework { # from common.pri
