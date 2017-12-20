@@ -359,8 +359,8 @@ bool VideoDecoderDXVAPrivate::createDecoder(AVCodecID codec_id, int w, int h, QV
         return false;
     }
     const int nb_surfaces = surf.size();
-    static const int kMaxSurfaceCount = 64;
-    IDirect3DSurface9* surface_list[kMaxSurfaceCount];
+    std::vector<IDirect3DSurface9*> surface_list;
+    surface_list.resize(nb_surfaces, nullptr);
     qDebug("IDirectXVideoDecoderService=%p nb_surfaces=%d surface %dx%d", vs, nb_surfaces, aligned(w), aligned(h));
     DX_ENSURE_OK(vs->CreateSurface(aligned(w),
                                  aligned(h),
@@ -369,7 +369,7 @@ bool VideoDecoderDXVAPrivate::createDecoder(AVCodecID codec_id, int w, int h, QV
                                  D3DPOOL_DEFAULT,
                                  0,
                                  DXVA2_VideoDecoderRenderTarget,
-                                 surface_list,
+                                 surface_list.data(),
                                  NULL)
             , false);
 
@@ -416,7 +416,7 @@ bool VideoDecoderDXVAPrivate::createDecoder(AVCodecID codec_id, int w, int h, QV
     if (score <= 0)
         return false;
     /* Create the decoder */
-    DX_ENSURE_OK(vs->CreateVideoDecoder(codec_guid, &dsc, &cfg, surface_list, nb_surfaces, &decoder), false);
+    DX_ENSURE_OK(vs->CreateVideoDecoder(codec_guid, &dsc, &cfg, surface_list.data(), nb_surfaces, &decoder), false);
     qDebug("IDirectXVideoDecoderService.CreateVideoDecoder succeed. decoder=%p", decoder);
     return true;
 }
