@@ -84,6 +84,7 @@ struct d3d9_surface_t : public va_surface_t {
     ~d3d9_surface_t() { SafeRelease(&d3d);}
     void setSurface(IUnknown* s) Q_DECL_OVERRIDE {
         d3d = (IDirect3DSurface9*)s;
+        d3d->AddRef();
     }
     IUnknown* getSurface() const {return d3d;}
 private:
