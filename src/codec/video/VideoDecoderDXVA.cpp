@@ -83,8 +83,8 @@ struct d3d9_surface_t : public va_surface_t {
     d3d9_surface_t() : va_surface_t(), d3d(0) {}
     ~d3d9_surface_t() { SafeRelease(&d3d);}
     void setSurface(IUnknown* s) Q_DECL_OVERRIDE {
+        s->AddRef();
         d3d = (IDirect3DSurface9*)s;
-        d3d->AddRef();
     }
     IUnknown* getSurface() const {return d3d;}
 private:
@@ -378,6 +378,8 @@ bool VideoDecoderDXVAPrivate::createDecoder(AVCodecID codec_id, int w, int h, QV
         d3d9_surface_t* s = new d3d9_surface_t();
         s->setSurface(surface_list[i]);
         surf[i] = s;
+        surface_list[i]->Release();
+
     }
     qDebug("IDirectXVideoAccelerationService_CreateSurface succeed with %d surfaces (%dx%d)", nb_surfaces, w, h);
 
