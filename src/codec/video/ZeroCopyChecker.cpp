@@ -40,7 +40,7 @@ ZeroCopyChecker::ZeroCopyChecker():
     delete m_surface;
     delete ctx;
 #elif !defined(Q_OS_ANDROID)
-    setZeroCopy(true);
+    setEnabled(true);
 #endif
 }
 
