@@ -36,7 +36,7 @@ namespace vaapi {
 bool checkEGL_DMA();
 bool checkEGL_Pixmap();
 
-class InteropResource
+class Q_AV_EXPORT InteropResource
 {
 public:
     virtual ~InteropResource() {}
@@ -79,7 +79,7 @@ private:
 };
 // load/resolve symbols only once in decoder and pass a VAAPI_XXX ptr
 // or use pool
-class GLXInteropResource Q_DECL_FINAL: public InteropResource, protected VAAPI_GLX
+class Q_AV_EXPORT GLXInteropResource Q_DECL_FINAL: public InteropResource, protected VAAPI_GLX
 {
 public:
     ~GLXInteropResource() {
@@ -95,7 +95,7 @@ private:
 };
 
 class X11;
-class X11InteropResource Q_DECL_FINAL: public InteropResource, protected VAAPI_X11
+class Q_AV_EXPORT X11InteropResource Q_DECL_FINAL: public InteropResource, protected VAAPI_X11
 {
 public:
     X11InteropResource();

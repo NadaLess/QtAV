@@ -177,6 +177,7 @@ public:
     virtual bool initialize(const NativeDisplay& display) = 0;
     virtual VADisplay getVADisplay() = 0;
     uintptr_t handle() { return m_handle;}
+    bool selfCreated() { return m_selfCreated;}
     virtual NativeDisplay::Type type() const = 0;
 protected:
     virtual bool acceptValidExternalHandle(const NativeDisplay& display) {
@@ -334,7 +335,9 @@ display_ptr display_t::create(const NativeDisplay &display)
         return display_ptr();
     VADisplay va = native->getVADisplay();
     int majorVersion, minorVersion;
-    VA_ENSURE(vaInitialize(va, &majorVersion, &minorVersion), display_ptr());
+    //FNadales: Let creator to manage VADisplay
+    if (native->selfCreated())
+        VA_ENSURE(vaInitialize(va, &majorVersion, &minorVersion), display_ptr());
     display_ptr d(new display_t());
     d->m_display = va;
     d->m_native = native;
@@ -345,6 +348,9 @@ display_ptr display_t::create(const NativeDisplay &display)
 
 display_t::~display_t()
 {
+    //FNadales: Let creator to manage VADisplay
+    if (!m_native->selfCreated()) return;
+
     if (!m_display)
         return;
     bool init_va = false;

@@ -265,16 +265,17 @@ private:
 
 class surface_t {
 public:
-    surface_t(int w, int h, VASurfaceID id, const display_ptr& display)
+    surface_t(int w, int h, VASurfaceID id, const display_ptr& display, const bool & deleteSurface = true)
         : m_id(id)
         , m_display(display)
         , m_width(w)
         , m_height(h)
         , color_space(VA_SRC_BT709)
+        , m_deleteSurface(deleteSurface)
     {}
     ~surface_t() {
-        //qDebug("VAAPI - destroying surface 0x%x", (int)m_id);
-        if (m_id != VA_INVALID_SURFACE)
+//        qDebug("VAAPI - destroying surface 0x%x", (int)m_id);
+        if (m_deleteSurface && m_id != VA_INVALID_SURFACE)
             VAWARN(vaDestroySurfaces(m_display->get(), &m_id, 1))
     }
     operator VASurfaceID() const { return m_id;}
@@ -290,6 +291,7 @@ private:
     display_ptr m_display;
     int m_width, m_height;
     int color_space;
+    bool m_deleteSurface;
 };
 typedef SharedPtr<surface_t> surface_ptr;
 #ifndef QT_NO_OPENGL
