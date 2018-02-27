@@ -406,7 +406,13 @@ config_libass {
   SOURCES *= subtitle/SubtitleProcessorLibASS.cpp
 }
 # mac is -FQTDIR we need -LQTDIR
-LIBS *= -L$$[QT_INSTALL_LIBS] -lavcodec -lavformat -lswscale -lavutil
+LIBS *= -L$$[QT_INSTALL_LIBS]
+LIBS += -Wl,--start-group -lavcodec -lavformat -lswscale -lavutil -Wl,--end-group
+
+#LIBS *= -L$$[QT_INSTALL_LIBS] -lavcodec -lavformat -lswscale -lavutil
+android{
+    LIBS += -lssl -lcrypto
+}
 win32 {
   HEADERS *= utils/DirectXHelper.h
   SOURCES *= utils/DirectXHelper.cpp
