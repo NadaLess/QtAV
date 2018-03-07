@@ -1,6 +1,6 @@
 #ifndef OPENGLCHECKER_H
 #define OPENGLCHECKER_H
-#include <QtAV_Global.h>
+#include <QtAV/QtAV_Global.h>
 #include <QOpenGLFunctions>
 #include <QOffscreenSurface>
 
